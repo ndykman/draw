@@ -977,5 +977,26 @@
         (andmap real? (list cw ch w h d a))))
 
 ;; ----------------------------------------
+;; record-dc% ink extents
+
+(let ()
+  (define dc (new record-dc% [width 10] [height 10] [record-ink? #t]))
+  (let ()
+    (define-values (l t w h) (send dc get-ink-extent))
+    (test '(0.0 0.0 0.0 0.0)  'bounds (list l t w h)))
+  (send dc set-pen (new pen% [width 2]))  
+  (send dc draw-line -1 0 30 0)
+  (define-values (l t w h) (send dc get-ink-extent))
+  (test '(-2.0 -1.0 33.0 2.0) 'bounds (list l t w h)))
+
+(let ()
+  (define dc (new record-dc% [width 10] [height 10]))
+  (send dc draw-line -1 0 30 0)
+  (test 'ok
+        'bounds-fail
+        (with-handlers ([exn:fail? (lambda (exn) 'ok)])
+          (send dc get-ink-extent))))
+
+;; ----------------------------------------
 
 (report-errs)

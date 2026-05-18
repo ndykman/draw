@@ -5,7 +5,7 @@
 (define build-deps '("gui-doc"
                      "pict-doc"
                      "at-exp-lib"
-                     "base"
+                     ["base" #:version "8.15"]
                      "gui-lib"
                      "pict-lib"
                      "scribble-lib"
