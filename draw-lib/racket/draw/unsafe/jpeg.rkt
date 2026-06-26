@@ -9,7 +9,7 @@
 (define-runtime-lib jpeg-lib
   [(unix) (ffi-lib "libjpeg" '("62" "8" "9" ""))]
   [(macosx) (ffi-lib "libjpeg.9.dylib")]
-  [(windows) (ffi-lib "libjpeg-9.dll")])
+  [(windows) (ffi-lib "jpeg8.dll")])
 
 (define-ffi-definer define-jpeg jpeg-lib
   #:provide provide)

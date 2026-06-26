@@ -13,14 +13,13 @@
    (ffi-lib "libfribidi.0.dylib")
    (ffi-lib "libpango-1.0.0.dylib")]
   [(windows)
-   (ffi-lib "libfribidi-0.dll")
-   (ffi-lib "libpango-1.0-0.dll")])
+   (ffi-lib "pango-1.0-0.dll")])
 
 (define-runtime-lib pangowin32-lib
   [(unix) #f]
   [(macosx)]
   [(windows)
-   (ffi-lib "libpangowin32-1.0-0.dll")])
+   (ffi-lib "pangowin32-1.0-0.dll")])
 
 (define-runtime-lib pangocairo-lib
   [(unix) (ffi-lib "libpangocairo-1.0" '("0" ""))]
@@ -29,15 +28,7 @@
    (ffi-lib "libpangoft2-1.0.0.dylib")
    (ffi-lib "libpangocairo-1.0.0.dylib")]
   [(windows)
-   (ffi-lib "libiconv-2.dll")
-   (ffi-lib "libintl-9.dll")
-   (ffi-lib "libpangowin32-1.0-0.dll")
-   (ffi-lib "libexpat-1.dll")
-   (ffi-lib "libfreetype-6.dll")
-   (ffi-lib "libfontconfig-1.dll")
-   (ffi-lib "libharfbuzz-0.dll")
-   (ffi-lib "libpangoft2-1.0-0.dll")
-   (ffi-lib "libpangocairo-1.0-0.dll")])
+   (ffi-lib "pangocairo-1.0-0.dll")])
 
 (define-ffi-definer define-pango pango-lib
   #:provide provide)

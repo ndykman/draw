@@ -20,8 +20,7 @@
                             (loop (cdr alts))))]))]
   [(macosx) (ffi-lib "libpng16.16.dylib")]
   [(windows)
-   (ffi-lib "zlib1.dll")
-   (ffi-lib "libpng16-16.dll")])
+   (ffi-lib "libpng16.dll")])
 
 (define-ffi-definer define-png png-lib
   #:provide provide)

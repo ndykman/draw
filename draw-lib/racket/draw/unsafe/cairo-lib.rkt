@@ -15,13 +15,7 @@
    (ffi-lib "libfreetype.6.dylib")
    (ffi-lib "libfontconfig.1.dylib")]
   [(windows)
-   (ffi-lib "zlib1.dll")
-   (ffi-lib "libiconv-2.dll")
-   (ffi-lib "libintl-9.dll")
-   (ffi-lib "libpng16-16.dll")
-   (ffi-lib "libexpat-1.dll")
-   (ffi-lib "libfreetype-6.dll")
-   (ffi-lib "libfontconfig-1.dll")])
+   (ffi-lib "fontconfig-1.dll")])
 
 (define-runtime-lib cairo-lib
   [(unix) (ffi-lib "libcairo" '("2" ""))]
@@ -29,8 +23,7 @@
    (ffi-lib "libpixman-1.0.dylib")
    (ffi-lib "libcairo.2.dylib")]
   [(windows)
-   (ffi-lib "libpixman-1-0.dll")
-   (ffi-lib "libcairo-2.dll")])
+   (ffi-lib "cairo-2.dll")])
 
 ;; A Racket-specific patch to Fontconfig defines FcSetFallbackDirs(),
 ;; which lets us set default paths to point to a Racket-specific
