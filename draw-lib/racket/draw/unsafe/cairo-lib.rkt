@@ -2,35 +2,48 @@
 (require ffi/unsafe
          ffi/unsafe/define
          ffi/unsafe/alloc
+	 ffi/unsafe/runtime-lib
+	 ffi/vcruntime
          setup/dirs
-         "../private/libs.rkt"
          "../private/utils.rkt")
 
 (define-runtime-lib fontconfig-lib
-  [(unix) (ffi-lib "libfontconfig" '("1" ""))]
-  [(macosx)
-   (ffi-lib "libpng16.16.dylib")
-   (ffi-lib "libexpat.1.dylib")
-   (ffi-lib "libuuid.1.dylib")
-   (ffi-lib "libfreetype.6.dylib")
-   (ffi-lib "libfontconfig.1.dylib")]
-  [(windows)
-   (ffi-lib "zlib1.dll")
-   (ffi-lib "libiconv-2.dll")
-   (ffi-lib "libintl-9.dll")
-   (ffi-lib "libpng16-16.dll")
-   (ffi-lib "libexpat-1.dll")
-   (ffi-lib "libfreetype-6.dll")
-   (ffi-lib "libfontconfig-1.dll")])
+  [macosx
+   (so "libpng16.16.dylib")
+   (so "libexpat.1.dylib")
+   (so "libuuid.1.dylib")
+   (so "libfreetype.6.dylib")
+   (so "libfontconfig.1.dylib")]
+  [(and windows 64)
+   (so "zlib1.dll")
+   (so "bz2.dll")
+   (so "libpng16.dll")
+   (so "brotlicommon.dll")
+   (so "brotlidec.dll")
+   (so "freetype.dll")
+   (so "libexpat.dll")
+   (so "fontconfig-1.dll")]
+  [windows
+   (so "zlib1.dll")
+   (so "libiconv-2.dll")
+   (so "libintl-9.dll")
+   (so "libpng16-16.dll")
+   (so "libexpat-1.dll")
+   (so "libfreetype-6.dll")
+   (so "libfontconfig-1.dll")]
+  [else (ffi-lib "libfontconfig" '("1" ""))])
 
 (define-runtime-lib cairo-lib
-  [(unix) (ffi-lib "libcairo" '("2" ""))]
-  [(macosx)
-   (ffi-lib "libpixman-1.0.dylib")
-   (ffi-lib "libcairo.2.dylib")]
-  [(windows)
-   (ffi-lib "libpixman-1-0.dll")
-   (ffi-lib "libcairo-2.dll")])
+  [macosx
+   (so "libpixman-1.0.dylib")
+   (so "libcairo.2.dylib")]
+  [(and windows 64)
+   (so "pixman-1-0.dll")
+   (so "cairo-2.dll")]
+  [windows
+   (so "libpixman-1-0.dll")
+   (so "libcairo-2.dll")]
+  [else (ffi-lib "libcairo" '("2" ""))])
 
 ;; A Racket-specific patch to Fontconfig defines FcSetFallbackDirs(),
 ;; which lets us set default paths to point to a Racket-specific

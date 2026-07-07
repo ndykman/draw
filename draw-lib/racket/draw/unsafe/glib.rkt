@@ -2,7 +2,8 @@
 (require ffi/unsafe
          ffi/unsafe/define
          ffi/unsafe/vm
-         "../private/libs.rkt")
+	 ffi/vcruntime
+         ffi/unsafe/runtime-lib)
 
 (provide (protect-out
           define-glib
@@ -10,41 +11,52 @@
           define-gobj))
 
 (define-runtime-lib glib-lib
-  [(unix) (ffi-lib "libglib-2.0" '("0" ""))]
-  [(macosx)
-   (ffi-lib "libintl.9.dylib")
-   (ffi-lib "libglib-2.0.0.dylib")]
-  [(windows)
-   (ffi-lib "libiconv-2.dll")
-   (ffi-lib "libintl-9.dll")
-   (ffi-lib "libglib-2.0-0.dll")])
+  [macosx
+   (so "libintl.9.dylib")
+   (so "libglib-2.0.0.dylib")]
+  [(and windows 64)
+   (so "iconv-2.dll")
+   (so "intl-8.dll")
+   (so "pcre2-8.dll")
+   (so "glib-2.0-0.dll")]
+  [windows
+   (so "libiconv-2.dll")
+   (so "libintl-9.dll")
+   (so "libglib-2.0-0.dll")]
+  [else (ffi-lib "libglib-2.0" '("0" ""))])
 
 (define-runtime-lib gmodule-lib
-  [(unix) (ffi-lib "libgmodule-2.0" '("0" ""))]
-  [(macosx)
-   (ffi-lib "libgthread-2.0.0.dylib")
-   (ffi-lib "libgmodule-2.0.0.dylib")]
-  [(windows)
-   (ffi-lib "libgthread-2.0-0.dll")
-   (ffi-lib "libgmodule-2.0-0.dll")])
+  [macosx
+   (so "libgthread-2.0.0.dylib")
+   (so "libgmodule-2.0.0.dylib")]
+  [(and windows 64)
+   (so "gmodule-2.0-0.dll")]
+  [windows
+   (so "libgthread-2.0-0.dll")
+   (so "libgmodule-2.0-0.dll")]
+  [else (ffi-lib "libgmodule-2.0" '("0" ""))])
 
 (define-runtime-lib libffi-lib
   ;; needed by libgobject
-  [(unix)
+  [macosx
+   (so "libffi.6.dylib")]
+  [(and windows 64)
+   (so "ffi-8.dll")]
+  [windows
+   (so "libffi-6.dll")]
+  [else
    ;; If an expected version is not available, then assume it's not
    ;; natipkg, and shared-library search when libgobject is loaded
-   (ffi-lib "libffi" '("6" "7" "8" "") #:fail (lambda () #f))]
-  [(macosx)
-   (ffi-lib "libffi.6.dylib")]
-  [(windows)
-   (ffi-lib "libffi-6.dll")])
+   (ffi-lib "libffi" '("6" "7" "8" "") #:fail (lambda () #f))])
 
 (define-runtime-lib gobj-lib
-  [(unix) (ffi-lib "libgobject-2.0" '("0" ""))]
-  [(macosx)
-   (ffi-lib "libgobject-2.0.0.dylib")]
-  [(windows)
-   (ffi-lib "libgobject-2.0-0.dll")])
+  [macosx
+   (so "libgobject-2.0.0.dylib")]
+  [(and windows 64)
+   (so "gobject-2.0-0.dll")]
+  [windows
+   (so "libgobject-2.0-0.dll")]
+  [else (ffi-lib "libgobject-2.0" '("0" ""))])
 
 (define-ffi-definer define-glib glib-lib)
 (define-ffi-definer define-gmodule gmodule-lib)

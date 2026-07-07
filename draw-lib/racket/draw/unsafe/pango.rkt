@@ -2,42 +2,46 @@
 (require ffi/unsafe
          ffi/unsafe/define
          ffi/unsafe/alloc
+	 ffi/unsafe/runtime-lib
          "glib.rkt"
          "cairo.rkt"
-         "../private/utils.rkt"
-         "../private/libs.rkt")
+         "../private/utils.rkt")
 
 (define-runtime-lib pango-lib
-  [(unix) (ffi-lib "libpango-1.0" '("0" ""))]
-  [(macosx)
-   (ffi-lib "libfribidi.0.dylib")
-   (ffi-lib "libpango-1.0.0.dylib")]
-  [(windows)
-   (ffi-lib "libfribidi-0.dll")
-   (ffi-lib "libpango-1.0-0.dll")])
+  [macosx
+   (so "libfribidi.0.dylib")
+   (so "libpango-1.0.0.dylib")]
+  [(and windows 64)
+   (so "gio-2.0-0.dll")
+   (so "fribidi-0.dll")
+   (so "harfbuzz.dll")
+   (so "pango-1.0-0.dll")]
+  [windows
+   (so "libfribidi-0.dll")
+   (so "libpango-1.0-0.dll")]
+  [else (ffi-lib "libpango-1.0" '("0" ""))])
 
 (define-runtime-lib pangowin32-lib
-  [(unix) #f]
-  [(macosx)]
-  [(windows)
-   (ffi-lib "libpangowin32-1.0-0.dll")])
+  [macosx]
+  [(and windows 64)
+   (so "pangowin32-1.0-0.dll")]
+  [windows
+   (so "libpangowin32-1.0-0.dll")]
+  [else #f])
 
 (define-runtime-lib pangocairo-lib
-  [(unix) (ffi-lib "libpangocairo-1.0" '("0" ""))]
-  [(macosx)
-   (ffi-lib "libharfbuzz.0.dylib")
-   (ffi-lib "libpangoft2-1.0.0.dylib")
-   (ffi-lib "libpangocairo-1.0.0.dylib")]
-  [(windows)
-   (ffi-lib "libiconv-2.dll")
-   (ffi-lib "libintl-9.dll")
-   (ffi-lib "libpangowin32-1.0-0.dll")
-   (ffi-lib "libexpat-1.dll")
-   (ffi-lib "libfreetype-6.dll")
-   (ffi-lib "libfontconfig-1.dll")
-   (ffi-lib "libharfbuzz-0.dll")
-   (ffi-lib "libpangoft2-1.0-0.dll")
-   (ffi-lib "libpangocairo-1.0-0.dll")])
+  [macosx
+   (so "libharfbuzz.0.dylib")
+   (so "libpangoft2-1.0.0.dylib")
+   (so "libpangocairo-1.0.0.dylib")]
+  [(and windows 64)
+   (so "pangoft2-1.0-0.dll")
+   (so "pangocairo-1.0-0.dll")]
+  [windows
+   (so "libharfbuzz-0.dll")
+   (so "libpangoft2-1.0-0.dll")
+   (so "libpangocairo-1.0-0.dll")]
+  [else (ffi-lib "libpangocairo-1.0" '("0" ""))])
 
 (define-ffi-definer define-pango pango-lib
   #:provide provide)

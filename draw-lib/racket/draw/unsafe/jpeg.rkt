@@ -2,14 +2,16 @@
 (require ffi/unsafe
          ffi/unsafe/define
          ffi/unsafe/alloc
+	 ffi/unsafe/runtime-lib
+         ffi/vcruntime
          "../private/utils.rkt"
-         "../private/libs.rkt"
          "callback.rkt")
 
 (define-runtime-lib jpeg-lib
-  [(unix) (ffi-lib "libjpeg" '("62" "8" "9" ""))]
-  [(macosx) (ffi-lib "libjpeg.9.dylib")]
-  [(windows) (ffi-lib "libjpeg-9.dll")])
+  [macosx (so "libjpeg.9.dylib")]
+  [(and windows 64) (so "jpeg8.dll")]
+  [windows (so "libjpeg-9.dll")]
+  [else (ffi-lib "libjpeg" '("62" "8" "9" ""))])
 
 (define-ffi-definer define-jpeg jpeg-lib
   #:provide provide)
